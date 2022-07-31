@@ -1,0 +1,22 @@
+<div class="back container mx-auto my-10 p-6 md:p-10 rounded-lg">
+    <form action="" class="grid grid-cols-2 w-full gap-10"  v-on:submit.prevent="onSubmit">
+        <div >
+            <input type="text" v-model="newReper.title" placeholder="Titulo de canción" class="block w-full my-5 px-5 py-3 rounded bg-gray-200 text-lg" required>    
+            <div v-if="submitted && !$v.newReper.title.required" class="text-white p-2 text-center w-44 -mt-3 font-bold bg-red-500 rounded-3xl">Titulo es requerido</div>
+
+            <input type="text" v-model="newReper.author" placeholder="Autor"  class="block w-full my-5 px-5 py-3 rounded bg-gray-200 text-lg" required>
+            <div v-if="submitted && !$v.newReper.author.required" class="text-white p-2 text-center w-44 -mt-3 font-bold bg-red-500 rounded-3xl">Autor es requerido</div>
+
+            <input type="url" v-model="newReper.link"  placeholder="Url del video" class="block w-full my-5 px-5 py-3 rounded bg-gray-200 text-lg" >
+        <!-- input file -->
+            <input type="submit" value="Guardar" class="cursor-pointer w-full sm:w-56 mx-auto md:m-0  bg-green-500 text-white p-5 rounded-xl md:mt-7 transform hover:scale-105 transition-all">
+
+        </div>
+        <div v-if="newReper.link">
+            <iframe class="rounded w-full h-56" :src="getNewLink(newReper.link)" title="YouTube video player" frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        
+    </form>    
+</div>    
