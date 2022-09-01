@@ -16,6 +16,16 @@ export default {
     return axios
       .post(`${config.api_route}/add-one`, data)
       .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  },
+  deleteOne(uuid) {
+    return axios
+      .delete(`${config.api_route}/delete-one/${uuid}`)
+      .then((res) => {
         return res;
       })
       .catch((error) => {

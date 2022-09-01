@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import service from '@/services/main'
+import service from '@/services/main';
 
 export default {
   name: 'modal',
@@ -46,9 +46,9 @@ export default {
     },
   },
   methods: {
-    closeModal() {
+    closeModal(new_song) {
       this.errors = []
-      this.$emit('closeModal', this.song);
+      this.$emit('closeModal', new_song);
       this.song = {
         name: null,
         author: null,
@@ -62,7 +62,6 @@ export default {
     onSubmit() {
       service.addOne(this.song).then((response) => {
         if (response === undefined) {
-          console.log('error')
           this.$vToastify.error({
             canPause: false,
             title: 'Error',
@@ -74,7 +73,7 @@ export default {
             title: 'Guardado',
             body: 'La canción ha sido guardada con éxito',
           });      
-          this.closeModal();
+          this.closeModal(response.new_song);
         }
       })
     },
@@ -99,8 +98,6 @@ export default {
 <style>
 .background-black {
   background-color: rgba(0, 0, 0, 0.555);
-}
-.form-add-song {
 }
 .form-add-song input[type="text"], input[type="url"], input[type="file"]{
   display: block;

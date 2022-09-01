@@ -15,15 +15,17 @@
       </div>
     </div>
     <table class="w-full text-center hidden lg:block">
+      <th class="p-2 md:px-5 pb-5">#</th>
       <th class="p-2 md:px-5 pb-5">Titulo</th>
       <th class="p-2 md:px-5 pb-5">Autor</th>
       <th class="p-2 md:px-5 pb-5">Inicio de aprender</th>
       <th class="p-2 md:px-5 pb-5">Fin de aprender</th>
-      <th class="p-2 md:px-5 pb-5">Youtube link</th>
+      <th class="p-2 md:px-5 pb-5">Link</th>
       <th class="p-2 md:px-5 pb-5">Editar</th>
       <th class="p-2 md:px-5 pb-5">Borrar</th>
 
-      <tr v-for="reper in repertoire" :key="reper.uuid">
+      <tr v-for="(reper, index) in repertoire" :key="reper.uuid">
+        <td>{{index + 1}}</td>
         <td class="p-2 md:p-5">{{ reper.name }}</td>
         <td class="p-2 md:p-5">{{ reper.author }}</td>
         <td class="p-2 md:p-5">{{ (reper.start_learning) ? reper.start_learnign : '-'}}</td> 
@@ -31,13 +33,18 @@
         <td class="p-2 md:p-5"> <button v-on:click="finishButton(reper.uuid)" class="p-2 text-white font-bold text-center bg-blue-500 rounded-3xl transition-all transform hover:scale-105">Terminar</button></td>
 
         <td class="p-2 md:p-5 ">
-          <a :href="reper.link" target="_blank">{{ reper.url }}</a>
+          <a :href="reper.url" target="_blank">
+            <font-awesome-icon icon="fa-solid fa-external-link-alt" class="text-xl cursor-pointer"/>          
+          </a>
         </td>
         <td class="p-2 md:p-5">
           <!-- <router-link :to="/edita-cancion/+reper._id"> <font-awesome-icon :icon="['fas', 'edit']" class="text-4xl text-yellow-500 cursor-pointer transition-all transform hover:scale-125"/></router-link> -->
         </td >
         <td class="p-2 md:p-5">
-          <!-- <font-awesome-icon v-on:click="deleteButton(reper.title, reper._id)" :icon="['fa', 'trash']" class="text-4xl text-red-500 cursor-pointer transition-all transform hover:scale-125"/> -->
+          <font-awesome-icon 
+            icon="fa-solid fa-trash" 
+            class="text-2xl hover:text-red-500 cursor-pointer transition-all transform hover:scale-125"
+            @click="deleteOne(reper.uuid)"/>        
         </td>
       </tr>
     </table>
@@ -75,7 +82,7 @@
       </div>
   
     </div> -->
-    <modal-add-song :show="show_modal" v-on:closeModal="updateTable"/>
+    <modal-add-song :show="show_modal" @closeModal="updateTable"/>
   </div>
 </template>
 
@@ -103,7 +110,6 @@ export default {
   methods:{
     getRepertoire(){
       service.getRepertoire().then((response) => {
-        console.log(response)
         this.repertoire = response;
       })
     },
@@ -121,18 +127,40 @@ export default {
     },
     updateTable(data) {
       this.show_modal = false;
-      this.repertoire.push(data)
-      console.log(data);
+      this.repertoire.unshift(data)
     },
-    deleteButton(title,id){
-      console.log(title, id)
-  
-     
+    deleteOne(uuid){
+      swal.fire({
+        title: '¿Estás seguro de elimnar?',
+        text: "Los cambios no podrán ser revertidos",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminalo'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          service.deleteOne(uuid).then((response) => {
+            if (response.status <= 400) {
+              this.repertoire = this.repertoire.filter((item) => item.uuid !== uuid);
+              this.$vToastify.success({
+                canPause: false,
+                title: 'Eliminada',
+                body: 'La canción ha sido eliminada con éxito',
+              });  
+            } else {
+              this.$vToastify.error({
+                canPause: false,
+                title: 'Error',
+                body: 'Ha ocurrido un error al tratar de eliminar la canción',
+              });
+            }
+          });
+        }
+      });
     },
-
   },
   created() {
-    console.log('hello')
     this.getRepertoire();
   }
 };
