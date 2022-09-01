@@ -1,6 +1,6 @@
 <template>
   <div class="container header mx-auto flex text-white justify-between items-center h-20 rounded-xl ">
-    <div class="px-10 text-5xl"><router-link to="/" active-class=""><img src="../assets/header.png" class="w-52 transform hover:scale-125 transition duration-500" alt="imf"></router-link></div>
+    <div class="px-10 text-5xl"><router-link to="/" active-class=""><img src="@/assets/header.png" class="w-52 transform hover:scale-125 transition duration-500" alt="imf"></router-link></div>
     <div>
       <ul class="flex text-xl">
         <li class="px-5"><router-link to='/repertorio' active-class="active" class="xd py-1 px-2 block transition duration-400">Repertorio</router-link></li>

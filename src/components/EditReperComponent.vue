@@ -3,7 +3,6 @@
 <script>
 import reper from '../models/reper';
 import axios from 'axios';
-import {required} from 'vuelidate/lib/validators';
 import global from '../global';
 import swal from 'sweetalert2';
 
@@ -84,13 +83,6 @@ export default {
     mounted(){
         this.getReper();
     },
-
-    validations:{
-        newReper:{
-            title: {required},
-            author : {required}
-        }
-    }
 }
 </script>
 

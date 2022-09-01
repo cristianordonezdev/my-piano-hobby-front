@@ -7,26 +7,20 @@ import CreateReperComponent from './components/CreateReperComponent.vue';
 import EditReperComponent from './components/EditReperComponent.vue';
 import CronometreComponent from './components/CronometreComponent.vue';
 import Buscar from './components/Buscar.vue';
-
 import redirect from './components/redirect.vue';
 import redirectSearch from './components/redirectSearch.vue';
+import VueToastify from "vue-toastify";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
-import vuelidate from 'vuelidate';
-import vueMoment from 'vue-moment';
+library.add(faUserSecret, faTimesCircle);
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faEdit,faTrash } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(faEdit,faTrash)
-
-Vue.component('font-awesome-icon', FontAwesomeIcon)
-
-
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false
 Vue.use(VueRouter);
-Vue.use(vuelidate);
-Vue.use(vueMoment);
+Vue.use(VueToastify);
 
 const routes =[
   {path:'/',component: HomeComponent},
