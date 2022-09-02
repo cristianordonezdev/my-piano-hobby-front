@@ -30,7 +30,9 @@
         <td class="p-2 md:p-5">{{ reper.author }}</td>
         <td class="p-2 md:p-5">{{ (reper.start_learning) ? reper.start_learnign : '-'}}</td> 
         <!-- <td class="p-2 md:p-5"> {{reper.end_learning}} dsdas</td> -->
-        <td class="p-2 md:p-5"> <button v-on:click="finishButton(reper.uuid)" class="p-2 text-white font-bold text-center bg-blue-500 rounded-3xl transition-all transform hover:scale-105">Terminar</button></td>
+        <td class="p-2 md:p-5"> 
+          <button v-on:click="finishButton(reper.uuid)" class="p-2 text-white font-bold text-center bg-blue-500 rounded-3xl transition-all transform hover:scale-105">Terminar</button>
+        </td>
 
         <td class="p-2 md:p-5 ">
           <a :href="reper.url" target="_blank">
@@ -38,51 +40,21 @@
           </a>
         </td>
         <td class="p-2 md:p-5">
-          <!-- <router-link :to="/edita-cancion/+reper._id"> <font-awesome-icon :icon="['fas', 'edit']" class="text-4xl text-yellow-500 cursor-pointer transition-all transform hover:scale-125"/></router-link> -->
+          <font-awesome-icon 
+            icon="fa-solid fa-edit" 
+            class="text-xl cursor-pointer hover:text-yellow-500 transition-all transform hover:scale-125"
+            @click="editOne(reper)"
+          />          
         </td >
         <td class="p-2 md:p-5">
           <font-awesome-icon 
             icon="fa-solid fa-trash" 
-            class="text-2xl hover:text-red-500 cursor-pointer transition-all transform hover:scale-125"
+            class="text-xl hover:text-red-500 cursor-pointer transition-all transform hover:scale-125"
             @click="deleteOne(reper.uuid)"/>        
         </td>
       </tr>
     </table>
-
-
-    <!-- <div class="w-full grid grid-cols-2 text-center lg:hidden text-sm sm:text-base" v-for="reper in rep" :key="reper._id">
-      <div class="font-bold">
-        <hr>
-
-        <div class="p-5 ">Titulo</div>
-         <div class="p-5 ">Autor</div>
-        <div class="p-5  ">Inicio de aprender</div>
-        <div class="p-5  	">Fin de aprender</div>
-        <div class="p-5  	">Youtube link</div>
-        <div class="p-5 ">Editar</div>
-        <div class="p-5 ">Borrar</div>
-      </div>
-      <div>
-        <hr>
-        <div class="p-5">{{ reper.title }}</div>
-        <div class="p-5">{{ reper.author }}</div>
-        <div class="p-5  ">{{ reper.start | moment("DD/MM/YYYY") }}</div>
-        <div class="p-5  " v-if="reper.end"> {{reper.end | moment("DD/MM/YYYY")}} </div>
-        <div class="p-5 " v-else> <button v-on:click="finishButton(reper._id)" class="p-1 tex-sm text-white font-bold text-center bg-blue-500 rounded-3xl transition-all transform hover:scale-105">Terminar</button></div>
-
-        <div class="p-5 ">
-          <a :href="reper.link" target="_blank">{{ reper.link }}</a>
-        </div>
-        <div class="p-5">
-          <router-link :to="/edita-cancion/+reper._id"> <font-awesome-icon :icon="['fas', 'edit']" class="text-3xl -mb-6 text-yellow-500 cursor-pointer transition-all transform hover:scale-125"/></router-link>
-        </div >
-        <div class="p-5">
-          <font-awesome-icon v-on:click="deleteButton(reper.title, reper._id)" :icon="['fas', 'trash']" class="text-3xl -mb-6 text-red-500 cursor-pointer transition-all transform hover:scale-125"/>
-        </div>
-      </div>
-  
-    </div> -->
-    <modal-add-song :show="show_modal" @closeModal="updateTable"/>
+    <modal-add-song :show="show_modal" @closeModal="updateTable" :song_to_edit="song_to_edit" :key="show_modal"/>
   </div>
 </template>
 
@@ -101,7 +73,8 @@ export default {
       repertoire: [],
       myOnlyRep: new reper("","","","",""),
       search: "",
-      show_modal: false
+      show_modal: false,
+      song_to_edit: {}
     };
   },
   components: {
@@ -113,10 +86,12 @@ export default {
         this.repertoire = response;
       })
     },
-
+    editOne(song) {
+      this.song_to_edit = song;
+      this.show_modal = !this.show_modal;
+    },
     addSong(){
       this.show_modal = !this.show_modal;
-      // this.$router.push('/agregar-cancion');
     },
     searchButton(){
       if(this.search ==""){
@@ -125,9 +100,19 @@ export default {
         this.$router.push('/buscar/'+this.search)
       }
     },
-    updateTable(data) {
+    updateTable(data, updated) {
+      this.song_to_edit = {};
       this.show_modal = false;
-      this.repertoire.unshift(data)
+      if (data.uuid && !updated) {
+        this.repertoire.unshift(data)
+      } else if (data.uuid && updated) {
+        const updated_repertoire = this.repertoire.map((item) => {
+          if (item.uuid === data.uuid) item = data;
+          return item
+        });
+        this.repertoire = updated_repertoire;
+      }
+
     },
     deleteOne(uuid){
       swal.fire({

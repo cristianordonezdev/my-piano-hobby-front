@@ -12,10 +12,10 @@ import redirectSearch from './components/redirectSearch.vue';
 import VueToastify from "vue-toastify";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faTrash, faUserSecret } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlusCircle, faTrash, faUserSecret } from '@fortawesome/free-solid-svg-icons';
 import { faTimesCircle, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faUserSecret, faTimesCircle, faTrash, faExternalLinkAlt);
+library.add(faUserSecret, faTimesCircle, faTrash, faExternalLinkAlt, faEdit, faPlusCircle);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false

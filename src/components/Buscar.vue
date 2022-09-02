@@ -23,8 +23,8 @@
       <tr v-for="reper in rep" :key="reper._id">
         <td class="p-2 md:p-5">{{ reper.title }}</td>
         <td class="p-2 md:p-5">{{ reper.author }}</td>
-        <td class="p-2 md:p-5  ">{{ reper.start | moment("DD/MM/YYYY") }}</td>
-        <td class="p-2 md:p-5  " v-if="reper.end"> {{reper.end | moment("DD/MM/YYYY")}} </td>
+        <td class="p-2 md:p-5  ">{{ reper.start }}</td>
+        <td class="p-2 md:p-5  " v-if="reper.end"> {{}} </td>
         <td class="p-2 md:p-5 " v-else> <button v-on:click="finishButton(reper._id)" class="p-2 text-white font-bold text-center bg-blue-500 rounded-3xl transition-all transform hover:scale-105">Terminar</button></td>
 
         <td class="p-2 md:p-5 ">
@@ -57,9 +57,6 @@
           <hr>
           <div class="p-5">{{ reper.title }}</div>
           <div class="p-5">{{ reper.author }}</div>
-          <div class="p-5  ">{{ reper.start | moment("DD/MM/YYYY") }}</div>
-          <div class="p-5  " v-if="reper.end"> {{reper.end | moment("DD/MM/YYYY")}} </div>
-          <div class="p-5 " v-else> <button v-on:click="finishButton(reper._id)" class="p-1 text-sm text-white font-bold text-center bg-blue-500 rounded-3xl transition-all transform hover:scale-105">Terminar</button></div>
 
           <div class="p-5 ">
             <a :href="reper.link" target="_blank">{{ reper.link }}</a>

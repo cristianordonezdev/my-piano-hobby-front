@@ -16,7 +16,10 @@
           <input type="url" placeholder="Youtube Link" v-model="song.url">
           <input type="file" placehol="Partiture" accept="application/pdf" @change="hasUploaded">
 
-          <button class="p-2 bg-green-500 text-white font-bold rounded-lg" @click.prevent="checkForm"> Agregar cancion</button>
+          <button class="p-2 bg-green-500 text-white font-bold rounded-lg" @click.prevent="checkForm"> 
+            <font-awesome-icon :icon="`fa-solid ${Object.keys(song_to_edit).length !== 0 ? 'fa-edit': 'fa-plus-circle'}`" class="mr-1"/>          
+            {{ Object.keys(song_to_edit).length !== 0 ? 'Editar canción' : 'Agregar canción' }}
+            </button>
         </form>
       </div>
     </div>
@@ -44,11 +47,19 @@ export default {
      type: Boolean,
      dafault: true
     },
+    song_to_edit: {
+      type: Object,
+      required: true
+    },
+  },
+  created() {    
+    if (Object.keys(this.song_to_edit).length !== 0)
+      this.song = {...this.song_to_edit};
   },
   methods: {
-    closeModal(new_song) {
+    closeModal(new_song, updated) {
       this.errors = []
-      this.$emit('closeModal', new_song);
+      this.$emit('closeModal', new_song, updated);
       this.song = {
         name: null,
         author: null,
@@ -60,22 +71,55 @@ export default {
       this.song.partiture = file.target.files[0]
     },
     onSubmit() {
-      service.addOne(this.song).then((response) => {
-        if (response === undefined) {
-          this.$vToastify.error({
-            canPause: false,
-            title: 'Error',
-            body: 'Ha ocurrido un error al tratar de guardar la canción',
-          });
-        } else {
-          this.$vToastify.success({
-            canPause: false,
-            title: 'Guardado',
-            body: 'La canción ha sido guardada con éxito',
-          });      
-          this.closeModal(response.new_song);
-        }
-      })
+
+      if (Object.keys(this.song_to_edit).length !== 0) {
+        const form  = new FormData();
+        form.append('uuid', this.song.uuid)
+        form.append('name', this.song.name);
+        form.append('author', this.song.author);
+        form.append('status', this.song.status);
+        form.append('url', this.song.url);
+        service.editOne(this.song).then((response) => {
+          if (response === undefined) {
+            this.$vToastify.error({
+              canPause: false,
+              title: 'Error',
+              body: 'Ha ocurrido un error al tratar de actualizar la canción',
+            });
+          } else {
+            this.$vToastify.success({
+              canPause: false,
+              title: 'Actualizado',
+              body: 'La canción ha sido actualizada con éxito',
+            });      
+            let updated = true;
+            this.closeModal(this.song, updated);
+          }
+        });
+      } else {
+        const form  = new FormData();
+        form.append('name', this.song.name);
+        form.append('author', this.song.author);
+        form.append('file', this.song.partiture);
+        form.append('url', this.song.url);
+        service.addOne(form).then((response) => {
+          if (response === undefined) {
+            this.$vToastify.error({
+              canPause: false,
+              title: 'Error',
+              body: 'Ha ocurrido un error al tratar de guardar la canción',
+            });
+          } else {
+            this.$vToastify.success({
+              canPause: false,
+              title: 'Guardado',
+              body: 'La canción ha sido guardada con éxito',
+            });      
+            const updated = false;
+            this.closeModal(response.new_song, updated);
+          }
+        });
+      }
     },
     checkForm() {
       this.errors = []

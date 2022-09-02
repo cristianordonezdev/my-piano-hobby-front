@@ -16,6 +16,18 @@ export default {
     return axios
       .post(`${config.api_route}/add-one`, data)
       .then((res) => {
+        console.log(res)
+        return res.data;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  },
+  editOne(data) {
+    return axios
+      .put(`${config.api_route}/edit-one`, data)
+      .then((res) => {
+        console.log(res)
         return res.data;
       })
       .catch((error) => {
