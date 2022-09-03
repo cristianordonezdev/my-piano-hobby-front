@@ -21,7 +21,9 @@
     "sweetalert2": "^11.1.5",
     "vue": "^2.6.11",
     "vue-router": "^3.5.2",
-    "vue-toastify": "^1.8.1"
+    "vue-select": "^3.20.0",
+    "vue-toastify": "^1.8.1",
+    "vuejs-datepicker": "^1.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

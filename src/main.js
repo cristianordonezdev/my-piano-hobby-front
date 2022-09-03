@@ -14,6 +14,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faEdit, faPlusCircle, faTrash, faUserSecret } from '@fortawesome/free-solid-svg-icons';
 import { faTimesCircle, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
 
 library.add(faUserSecret, faTimesCircle, faTrash, faExternalLinkAlt, faEdit, faPlusCircle);
 
@@ -21,6 +23,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false
 Vue.use(VueRouter);
 Vue.use(VueToastify);
+Vue.component('v-select', vSelect)
 
 const routes =[
   {path:'/',component: HomeComponent},
