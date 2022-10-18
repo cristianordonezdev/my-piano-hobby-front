@@ -4,6 +4,7 @@
       <div class="lg:w-auto w-full">
         <h2 class="block text-4xl font-bold mb-5 text-center">Repertorio</h2>
         <button v-on:click="addSong"  class="mx-auto lg:m-auto block text-white font-bold bg-green-500 hover:bg-green-700 transition-all transform hover:scale-105 px-8 py-5 mb-5 lg:mb-10 flex rounded-xl">Agrega nueva cancion</button>
+        <button @click="sortList"  class="mx-auto lg:m-auto block text-white font-bold bg-blue-500 hover:bg-blue-700 transition-all transform hover:scale-105 px-8 py-5 mb-5 lg:mb-10 flex rounded-xl">Sortear lista</button>
       </div>
       <div class="w-full lg:w-1/4">
 
@@ -81,6 +82,9 @@ export default {
     modalAddSong,
   },
   methods:{
+    sortList() {
+      this.repertoire.sort(() => { return Math.random() - 0.5});
+    },
     getRepertoire(){
       service.getRepertoire().then((response) => {
         this.repertoire = response;

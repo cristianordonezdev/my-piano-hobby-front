@@ -16,7 +16,6 @@ export default {
     return axios
       .post(`${config.api_route}/add-one`, data)
       .then((res) => {
-        console.log(res)
         return res.data;
       })
       .catch((error) => {
@@ -27,7 +26,6 @@ export default {
     return axios
       .put(`${config.api_route}/edit-one`, data)
       .then((res) => {
-        console.log(res)
         return res.data;
       })
       .catch((error) => {
@@ -37,6 +35,16 @@ export default {
   deleteOne(uuid) {
     return axios
       .delete(`${config.api_route}/delete-one/${uuid}`)
+      .then((res) => {
+        return res;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  },
+  stadistic(data) {
+    return axios
+      .post(`${config.api_route}/stadistic`, data)
       .then((res) => {
         return res;
       })
